@@ -10,6 +10,8 @@ class PathSearch(object):
     nodes_dict= {}
     search_label = 0
     Helper = 0
+    START = 0
+    GOAL = 0
     
     #Private methods:
     def __AddNodes(self,quantity):        
@@ -71,15 +73,30 @@ class PathSearch(object):
         
     def DeleteRandom(self):
         #Delete between helper and ((helper*helper)/2)
-        
-        #delete nodes in the quantity of 1 row
-        #or delete near the half of the nodes
-        # randomly
+        #delete nodes randomly
+        max_nodes= (self.Helper*self.Helper) -1
+        to_delete = random.randrange(self.Helper,int(max_nodes/2))
+        #for i in range( int(max_nodes/2) ):
+        for i in range(to_delete):
+            rn = random.randrange(0,max_nodes)
+            if self.X.has_node(rn) is False or rn is self.START or rn is self.GOAL:
+                continue
+            else:
+                self.X.remove_node(rn)
         return
-        
+    
+    def heuristic(self,a, b):
+        aX = self.nodes_dict.get(a)[0]
+        aY = self.nodes_dict.get(a)[1]
+        bX = self.nodes_dict.get(b)[0]
+        bY = self.nodes_dict.get(b)[1]
+        return abs(aX - bX) + abs(aY - bY)
+    
     def AStar(self,StartX,StartY, GoalX,GoalY):
         start = StartX + (self.Helper*StartY)
         goal  = GoalX  + (self.Helper*GoalY )
+        self.START = start
+        self.GOAL = goal
         pathSize = 0
         
         if self.X.has_node(start) is False or self.X.has_node(goal) is False:
@@ -89,21 +106,20 @@ class PathSearch(object):
         Pawn = PriorityQueue()
         Pawn.put(start, 0)
         came_from = {}
-        cost_so_far = {}
+        Score = {}
         came_from[start] = None
-        cost_so_far[start] = 0
-        
+        Score[start] = 0
         while not Pawn.empty():
             current = Pawn.get()        
             if current == goal:
                 break
-            for next in self.X.neighbors(current):
-                new_cost = cost_so_far[current]
-                if next not in cost_so_far or new_cost < cost_so_far[next]:
-                    cost_so_far[next] = new_cost
-                    priority = new_cost
-                    Pawn.put(next, priority)
-                    came_from[next] = current
+            for Next in self.X.neighbors(current):
+                tentative_score = Score[current]
+                if Next not in Score or tentative_score < Score[Next]:
+                    Score[Next] = tentative_score
+                    fScore = tentative_score + self.heuristic(goal, Next)
+                    Pawn.put(Next, fScore)
+                    came_from[Next] = current
         #print( came_from.items())
         #print( came_from.keys())        
         #Now return the path
@@ -126,13 +142,14 @@ class PathSearch(object):
         
         #start = self.X.node[StartX + (self.Helper*StartY)]
         #goal  = self.X.node[GoalX  + (self.Helper*GoalY )]
-        nodes = list(self.X.nodes)
         
-        start = nodes[StartX + (self.Helper*StartY)]
-        goal  = nodes[GoalX  + (self.Helper*GoalY )]
-        
-        frontier = Queue()
-        frontier.put(start)
+        ###        
+        #nodes = list(self.X.nodes)        
+        #start = nodes[StartX + (self.Helper*StartY)]
+        #goal  = nodes[GoalX  + (self.Helper*GoalY )]        
+        #frontier = Queue()
+        #frontier.put(start)        
+        ###
         """
         frontier = Queue()
         frontier.put(start )
@@ -154,14 +171,20 @@ class PathSearch(object):
         return
 def main():
     A= PathSearch()
-    A.CreateRegularGraph(20)
-    
+    A.CreateRegularGraph(20)    
+    """
+    print(A.nodes_dict.get(355)[0])
+    print(A.nodes_dict.get(355)[1])
+    print(A.nodes_dict.items())
+    """
+    A.DeleteRandom()
     print("path size was ",A.AStar(0,0,15,19))
-    print("Helper was ",A.Helper)
-    A.Display()
-        
+    #print("Helper was ",A.Helper)
+    A.Display()        
 if __name__ == '__main__':  
     main()
+
+
 """
 #Direct Code for printing
     X = nx.Graph()
