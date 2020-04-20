@@ -20,4 +20,4 @@ El programa automaticamente correra ambos algoritmos y el resultado saldra en "R
 - El **algoritmo A*** tendra un camino de color **verde**
 - El **algoritmo Busqueda Ciega** tendra un camino de color **rojo**
 ***
-![demostracion](https://github.com/TLJuan/CS_2020_1/tree/master/lab_busquedaslab_busquedas/Result.png)
+![demostracion](https://github.com/TLJuan/CS_2020_1/blob/master/lab_busquedas/Demostration.png)
