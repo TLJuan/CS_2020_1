@@ -49,6 +49,7 @@ class PathSearch(object):
         self.__AddNodes(size)
         self.__AddEdges(size)
         self.Helper = size
+        self.__DeleteRandom()
         return
 
     # Deletes nodes randomly
@@ -118,7 +119,6 @@ class PathSearch(object):
         nodossinhijos.append(self.START)
 
         current = path[0]
-
         while current != self.GOAL:
             vecinos = []
             for i in self.X.neighbors(current):
@@ -153,7 +153,7 @@ class PathSearch(object):
             print("Start or goal doesn't exist")
             return 0
         # Delete Nodes
-        self.__DeleteRandom()
+        # self.__DeleteRandom()
         # Using priority queue
         Pawn = PriorityQueue()
         Pawn.put(self.START, 0)
@@ -189,8 +189,12 @@ class PathSearch(object):
 
 def main():
     A = PathSearch()
-    A.CreateRegularGraph(20)
-    print("path size was ", A.blindSearch(12, 5, 15, 17))
+    numberNodes = 20
+    A.CreateRegularGraph(numberNodes)
+    Sx, Sy = 12,7
+    Gx, Gy = 15,15
+    print("Path size with Blind Search was: ", A.blindSearch(Sx, Sy, Gx, Gy))
+    print("Path size with A* was: ", A.AStar(Sx, Sy, Gx, Gy))
     A.Display()
 
 
