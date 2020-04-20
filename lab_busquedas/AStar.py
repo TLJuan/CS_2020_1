@@ -53,14 +53,14 @@ class PathSearch(object):
 
     # Deletes nodes randomly
     def __DeleteRandom(self):
-        # Delete between helper and ((helper*helper)/2)
-        max_nodes = (self.Helper * self.Helper) - 1
+        max_nodes = (self.Helper * self.Helper)
         to_delete = (max_nodes * 20) / 100
         # to_delete = random.randrange(self.Helper, int(max_nodes / 2))
 
         nodes_deleted = 0
         print("Helper:", self.Helper)
-        for i in range(int(to_delete)):
+        i = 0
+        while i < to_delete:
             rn = random.randrange(0, max_nodes)
             if self.X.has_node(rn) is False:
                 continue
@@ -69,6 +69,8 @@ class PathSearch(object):
             else:
                 self.X.remove_node(rn)
                 nodes_deleted += 1
+            i = i + 1
+
         print("nodes deleted:", nodes_deleted)
         return
 
