@@ -58,7 +58,7 @@ class PathSearch(object):
         # to_delete = random.randrange(self.Helper, int(max_nodes / 2))
 
         nodes_deleted = 0
-        print("Helper:", self.Helper)
+        print("Height of the graph:", self.Helper)
         i = 0
         while i < to_delete:
             rn = random.randrange(0, max_nodes)
@@ -71,7 +71,7 @@ class PathSearch(object):
                 nodes_deleted += 1
             i = i + 1
 
-        print("nodes deleted:", nodes_deleted)
+        print("Nodes deleted:", nodes_deleted)
         return
 
     # saves the graph in the local directory and displays the graph
@@ -89,12 +89,12 @@ class PathSearch(object):
         nx.draw_networkx_edges(self.X, self.nodes_dict, width=2, edge_color=colors, alpha=0.75)
 
         if self.search_label is 1:
-            plt.title('A* Search')
+            plt.title('Result')
         elif self.search_label is 2:
-            plt.title('Blink Search')
+            plt.title('Result')
         else:
             plt.title('No Search Performed')
-        plt.savefig("Graph.pdf", format="PDF")
+        plt.savefig("Result.pdf", format="PDF")
         plt.show()
 
     # Simple heuristic, determines the distance between a pair of nodes
@@ -109,19 +109,14 @@ class PathSearch(object):
     def blindSearch(self, StartX, StartY, GoalX, GoalY):
         self.START = StartX + (self.Helper * StartY)
         self.GOAL = GoalX + (self.Helper * GoalY)
-        pathSize = 0
-        # Delete Nodes
         if (self.X.has_node(self.START) is False) or (self.X.has_node(self.GOAL) is False):
             print("Start or goal doesn't exist")
             return 0
-        # Delete Nodes
-        self.__DeleteRandom()
         path = []
-        came_from = {}
         nodossinhijos = []
         path.append(self.START)
         nodossinhijos.append(self.START)
-        came_from[self.START] = None
+
         current = path[0]
 
         while current != self.GOAL:
@@ -184,7 +179,7 @@ class PathSearch(object):
             returnPath.update({returner: came_from[returner]})
             # Since adding an edge that already exists updates the edge data.
             # Change color of edges
-            self.X.add_edge(returner, came_from[returner], color='R')
+            self.X.add_edge(returner, came_from[returner], color='green')
             returner = came_from[returner]
             pathSize = pathSize + 1
         # print (returnPath.items())
