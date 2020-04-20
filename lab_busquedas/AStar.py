@@ -51,7 +51,28 @@ class PathSearch(object):
         self.Helper = size
         return
 
-    # saves the graph in the local directory and dislays the graph
+    # Deletes nodes randomly
+    def __DeleteRandom(self):
+        # Delete between helper and ((helper*helper)/2)
+        max_nodes = (self.Helper * self.Helper) - 1
+        to_delete = (max_nodes * 20) / 100
+        # to_delete = random.randrange(self.Helper, int(max_nodes / 2))
+
+        nodes_deleted = 0
+        print("Helper:", self.Helper)
+        for i in range(int(to_delete)):
+            rn = random.randrange(0, max_nodes)
+            if self.X.has_node(rn) is False:
+                continue
+            elif (rn == self.START) or (rn == self.GOAL):
+                continue
+            else:
+                self.X.remove_node(rn)
+                nodes_deleted += 1
+        print("nodes deleted:", nodes_deleted)
+        return
+
+    # saves the graph in the local directory and displays the graph
     def Display(self):
         # Show the plot in non-blocking mode
         plt.show(block=False)
@@ -74,27 +95,6 @@ class PathSearch(object):
         plt.savefig("Graph.pdf", format="PDF")
         plt.show()
 
-    # Deletes nodes randomly
-    def __DeleteRandom(self):
-        # Delete between helper and ((helper*helper)/2)
-        max_nodes = (self.Helper * self.Helper) - 1
-        to_delete = (max_nodes * 20) / 100
-        # to_delete = random.randrange(self.Helper, int(max_nodes / 2))
-
-        nodes_deleted = 0
-        print("Helper:", self.Helper)
-        for i in range(int(to_delete)):
-            rn = random.randrange(0, max_nodes)
-            if self.X.has_node(rn) is False:
-                continue
-            elif (rn == self.START) or (rn == self.GOAL):
-                continue
-            else:
-                self.X.remove_node(rn)
-                nodes_deleted += 1
-        print("nodes deleted:", nodes_deleted)
-        return
-
     # Simple heuristic, determines the distance between a pair of nodes
     def heuristic(self, a, b):
         aX = self.nodes_dict.get(a)[0]
@@ -114,7 +114,6 @@ class PathSearch(object):
             return 0
         # Delete Nodes
         self.__DeleteRandom()
-        self.Display()
         path = []
         came_from = {}
         nodossinhijos = []
